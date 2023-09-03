@@ -1,0 +1,43 @@
+<form [formGroup]="form">
+  <mat-toolbar>
+    <span>Magic table (WIP: please clarify the logs and the date-picker part then it would be doable to add them respectively :) ) </span>
+    <button
+      class="edit"
+      mat-icon-button
+      aria-label="Editar"
+      (click)="editSwitcher()"
+    >
+      <mat-icon>{{ isEditMode ? 'task_alt' : 'mode_edit' }}</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <div class="example-container mat-elevation-z8">
+    <mat-table #table [dataSource]="dataSource" formArrayName="element">
+      <ng-container
+        *ngFor="let weekDay of displayedColumns; let i = index"
+        [matColumnDef]="weekDay"
+      >
+        <mat-header-cell *matHeaderCellDef>{{ weekDay === 'currentDateTime' ? 'Time Period' : weekDay }}</mat-header-cell>
+        <mat-cell
+          *matCellDef="let element; let rowIndex = index"
+          [formGroupName]="rowIndex"
+        >
+          <span *ngIf="!isEditMode">{{element[weekDay]}}</span>
+          <!--TODO: map to formControlName targeting the displayValue when weekday and date_time when weekDay === currentDateTime-->
+          <input
+            matInput
+            [value]="element[weekDay]"
+            *ngIf="isEditMode"
+          />
+          <!--TODO: Add a <mat-datepicker> </mat-datepicker> when Business clarifies precise intentions-->
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        class="element-row"
+      ></mat-row>
+    </mat-table>
+  </div>
+</form>
